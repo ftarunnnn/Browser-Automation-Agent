@@ -51,7 +51,7 @@ class BrowserInspector:
             const links = Array.from(document.querySelectorAll('a[href]'))
                 .filter(isVisible)
                 .map(a => ({ text: a.innerText.trim(), href: a.href }))
-                .filter(l => l.href.length > 0 && !l.href.startswith('javascript:'));
+                .filter(l => l.href.length > 0 && !l.href.startsWith('javascript:'));
 
             const bodyText = (document.body ? document.body.innerText : '').replace(/\s+/g, ' ').trim();
 
