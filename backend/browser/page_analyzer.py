@@ -92,7 +92,7 @@ class PageAnalyzer:
         title = await page.title()
 
         # Execute JS extraction script in browser context
-        extraction_js = """
+        extraction_js = r"""
         () => {
             const isVisible = (elem) => {
                 if (!elem) return false;
@@ -117,7 +117,6 @@ class PageAnalyzer:
                 return selector;
             };
 
-            const interactiveTags = ['a', 'button', 'input', 'select', 'textarea', 'option'];
             const allElements = Array.from(document.querySelectorAll('a, button, input, select, textarea, [role="button"], [role="link"], [role="textbox"], [role="option"], [onclick]'));
             
             const interactiveElements = [];
