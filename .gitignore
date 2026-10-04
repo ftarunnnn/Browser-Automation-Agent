@@ -1,0 +1,31 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / React
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Environment & Storage
+.env
+*.db
+*.sqlite
+*.sqlite3
+backend/storage/
+screenshots_storage/
+downloads_storage/
+logs/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
