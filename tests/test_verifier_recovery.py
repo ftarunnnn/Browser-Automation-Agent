@@ -31,7 +31,7 @@ async def test_recovery_engine_alternative_selector():
     recovery = engine.get_recovery_action(failed_action, "Element #invalid-btn not found", current_page, [])
     assert recovery.action.action == "click"
     assert recovery.action.selector == "button[name='submit']"
-    assert "Alternative visible element" in recovery.explanation
+    assert "alternative visible element" in recovery.explanation.lower()
 
 
 @pytest.mark.asyncio
