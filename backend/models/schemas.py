@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 # User Schemas
@@ -15,9 +15,7 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Task Schemas
@@ -30,9 +28,7 @@ class TaskStepResponse(BaseModel):
     step_number: int
     description: str
     status: str
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AgentActionResponse(BaseModel):
@@ -43,9 +39,7 @@ class AgentActionResponse(BaseModel):
     error_message: Optional[str] = None
     execution_time_ms: Optional[int] = None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ScreenshotResponse(BaseModel):
@@ -53,9 +47,7 @@ class ScreenshotResponse(BaseModel):
     filepath: str
     url: Optional[str] = None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TaskResultResponse(BaseModel):
@@ -63,9 +55,7 @@ class TaskResultResponse(BaseModel):
     structured_data: Dict[str, Any]
     extracted_text: Optional[str] = None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ApprovalResponse(BaseModel):
@@ -76,9 +66,7 @@ class ApprovalResponse(BaseModel):
     parameters: Dict[str, Any]
     status: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TaskResponse(BaseModel):
@@ -95,9 +83,7 @@ class TaskResponse(BaseModel):
     results: List[TaskResultResponse] = []
     screenshots: List[ScreenshotResponse] = []
     approvals: List[ApprovalResponse] = []
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Action Schema for AI tool calling
