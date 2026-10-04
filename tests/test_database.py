@@ -1,5 +1,7 @@
 import pytest
 import pytest_asyncio
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from backend.models.database import Base, TaskModel, TaskStepModel, AgentActionModel, TaskResultModel, ScreenshotModel, ApprovalModel
 
@@ -47,7 +49,13 @@ async def test_task_creation_and_relations(async_session: AsyncSession):
     async_session.add(action)
     await async_session.commit()
 
-    saved_task = await async_session.get(TaskModel, "task-test-123")
+    stmt = select(TaskModel).where(TaskModel.id == "task-test-123").options(
+        selectinload(TaskModel.steps),
+        selectinload(TaskModel.actions)
+    )
+    res = await async_session.execute(stmt)
+    saved_task = res.scalar_one_or_none()
+
     assert saved_task is not None
     assert saved_task.instruction == "Search for Python tutorials"
     assert len(saved_task.steps) == 1

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 import json
 from typing import Optional, List
-from sqlalchemy import String, Integer, DateTime, Text, ForeignKey, Enum as SQLEnum
+from sqlalchemy import String, Integer, DateTime, Text, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from backend.config import settings
@@ -18,7 +18,7 @@ class UserModel(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    tasks: Mapped[List["TaskModel"]] = relationship("TaskModel", back_populates="user", cascade="all, delete-orphan")
+    tasks: Mapped[List["TaskModel"]] = relationship("TaskModel", back_populates="user", cascade="all, delete-orphan", lazy="selectin")
 
 
 class TaskModel(Base):
@@ -34,12 +34,12 @@ class TaskModel(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
-    user: Mapped[Optional["UserModel"]] = relationship("UserModel", back_populates="tasks")
-    steps: Mapped[List["TaskStepModel"]] = relationship("TaskStepModel", back_populates="task", cascade="all, delete-orphan", order_by="TaskStepModel.step_number")
-    actions: Mapped[List["AgentActionModel"]] = relationship("AgentActionModel", back_populates="task", cascade="all, delete-orphan", order_by="AgentActionModel.id")
-    results: Mapped[List["TaskResultModel"]] = relationship("TaskResultModel", back_populates="task", cascade="all, delete-orphan")
-    screenshots: Mapped[List["ScreenshotModel"]] = relationship("ScreenshotModel", back_populates="task", cascade="all, delete-orphan")
-    approvals: Mapped[List["ApprovalModel"]] = relationship("ApprovalModel", back_populates="task", cascade="all, delete-orphan")
+    user: Mapped[Optional["UserModel"]] = relationship("UserModel", back_populates="tasks", lazy="selectin")
+    steps: Mapped[List["TaskStepModel"]] = relationship("TaskStepModel", back_populates="task", cascade="all, delete-orphan", order_by="TaskStepModel.step_number", lazy="selectin")
+    actions: Mapped[List["AgentActionModel"]] = relationship("AgentActionModel", back_populates="task", cascade="all, delete-orphan", order_by="AgentActionModel.id", lazy="selectin")
+    results: Mapped[List["TaskResultModel"]] = relationship("TaskResultModel", back_populates="task", cascade="all, delete-orphan", lazy="selectin")
+    screenshots: Mapped[List["ScreenshotModel"]] = relationship("ScreenshotModel", back_populates="task", cascade="all, delete-orphan", lazy="selectin")
+    approvals: Mapped[List["ApprovalModel"]] = relationship("ApprovalModel", back_populates="task", cascade="all, delete-orphan", lazy="selectin")
 
 
 class TaskStepModel(Base):
@@ -51,8 +51,8 @@ class TaskStepModel(Base):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(String(32), default="pending")  # pending, running, completed, failed
 
-    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="steps")
-    actions: Mapped[List["AgentActionModel"]] = relationship("AgentActionModel", back_populates="step")
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="steps", lazy="selectin")
+    actions: Mapped[List["AgentActionModel"]] = relationship("AgentActionModel", back_populates="step", lazy="selectin")
 
 
 class AgentActionModel(Base):
@@ -68,9 +68,9 @@ class AgentActionModel(Base):
     execution_time_ms: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="actions")
-    step: Mapped[Optional["TaskStepModel"]] = relationship("TaskStepModel", back_populates="actions")
-    screenshot: Mapped[Optional["ScreenshotModel"]] = relationship("ScreenshotModel", back_populates="action", uselist=False)
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="actions", lazy="selectin")
+    step: Mapped[Optional["TaskStepModel"]] = relationship("TaskStepModel", back_populates="actions", lazy="selectin")
+    screenshot: Mapped[Optional["ScreenshotModel"]] = relationship("ScreenshotModel", back_populates="action", uselist=False, lazy="selectin")
 
     @property
     def parameters(self) -> dict:
@@ -90,7 +90,7 @@ class TaskResultModel(Base):
     extracted_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="results")
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="results", lazy="selectin")
 
     @property
     def structured_data(self) -> dict:
@@ -111,8 +111,8 @@ class ScreenshotModel(Base):
     url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="screenshots")
-    action: Mapped[Optional["AgentActionModel"]] = relationship("AgentActionModel", back_populates="screenshot")
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="screenshots", lazy="selectin")
+    action: Mapped[Optional["AgentActionModel"]] = relationship("AgentActionModel", back_populates="screenshot", lazy="selectin")
 
 
 class ApprovalModel(Base):
@@ -127,7 +127,7 @@ class ApprovalModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
     responded_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
-    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="approvals")
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="approvals", lazy="selectin")
 
     @property
     def parameters(self) -> dict:
