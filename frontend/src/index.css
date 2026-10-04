@@ -1,10 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans selection:bg-blue-500 selection:text-white;
+    background-color: #020617;
+    color: #f8fafc;
+    font-family: ui-sans-serif, system-ui, sans-serif;
   }
 }
 
