@@ -260,13 +260,13 @@ class AgentOrchestrator:
 
             await emit("status_change", {"status": final_status, "message": f"Task finished with status: {final_status}"})
 
-            return {
-                "status": final_status,
-                "task_id": task_id,
-                "steps_completed": step_count,
-                "extracted_data": memory.extracted_data,
-                "error_message": error_msg
-            }
+        return {
+            "status": final_status,
+            "task_id": task_id,
+            "steps_completed": step_count,
+            "extracted_data": memory.extracted_data,
+            "error_message": error_msg
+        }
 
     def stop_task(self, task_id: str):
         self.stop_requested[task_id] = True
