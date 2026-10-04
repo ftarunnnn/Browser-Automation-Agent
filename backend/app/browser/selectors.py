@@ -23,29 +23,24 @@ class SelectorEngine:
         selector: Optional[str] = None,
         xpath: Optional[str] = None
     ) -> Locator:
-        # Priority 1: Role
-        if role and text:
-            try:
-                return page.get_by_role(role, name=text).first
-            except Exception:
-                pass
-        elif role:
-            try:
-                return page.get_by_role(role).first
-            except Exception:
-                pass
-
-        # Priority 2: Label
+        # Priority 1: Label
         if label:
             try:
                 return page.get_by_label(label).first
             except Exception:
                 pass
 
-        # Priority 3: Placeholder
+        # Priority 2: Placeholder
         if placeholder:
             try:
                 return page.get_by_placeholder(placeholder).first
+            except Exception:
+                pass
+
+        # Priority 3: Role with text
+        if role and text:
+            try:
+                return page.get_by_role(role, name=text).first
             except Exception:
                 pass
 
