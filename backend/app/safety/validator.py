@@ -15,16 +15,18 @@ class InputValidator:
         if not url:
             return False, "URL cannot be empty"
 
-        if not (url.startswith("http://") or url.startswith("https://") or url.startswith("data:text/html")):
-            url = "https://" + url
+        url_lower = url.lower()
+        for scheme in cls.BLOCKED_SCHEMES:
+            if url_lower.startswith(f"{scheme}://") or url_lower.startswith(f"{scheme}:"):
+                return False, f"URL scheme '{scheme}' is blocked for security"
 
         if url.startswith("data:text/html"):
             return True, url
 
-        parsed = urlparse(url)
-        if parsed.scheme.lower() in cls.BLOCKED_SCHEMES:
-            return False, f"URL scheme '{parsed.scheme}' is blocked for security"
+        if not (url.startswith("http://") or url.startswith("https://")):
+            url = "https://" + url
 
+        parsed = urlparse(url)
         hostname = (parsed.hostname or "").lower()
         if hostname in cls.BLOCKED_HOSTS and not url.startswith("http://127.0.0.1:8088"):  # local test server exception
             return False, f"Access to private/internal host '{hostname}' is restricted (SSRF protection)"

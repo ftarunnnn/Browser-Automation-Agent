@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form - WebPilot AI Test</title>
+</head>
+<body style="font-family: sans-serif; padding: 2rem;">
+    <h2>Student Registration Form</h2>
+    <form id="reg-form" onsubmit="event.preventDefault(); document.getElementById('msg').innerText = 'Registration Submitted Successfully!';">
+        <label>Full Name:</label><br>
+        <input type="text" id="fullname" name="fullname" placeholder="John Doe" required style="padding: 6px;" /><br><br>
+
+        <label>Email Address:</label><br>
+        <input type="email" id="email" name="email" placeholder="john@example.com" required style="padding: 6px;" /><br><br>
+
+        <label>Select Course:</label><br>
+        <select id="course" name="course" style="padding: 6px;">
+            <option value="py101">Python Fundamentals</option>
+            <option value="ai201">AI Agent Engineering</option>
+        </select><br><br>
+
+        <button type="submit" id="submit-btn" style="padding: 8px 16px;">Submit Registration</button>
+    </form>
+
+    <div id="msg" style="margin-top: 15px; font-weight: bold; color: green;"></div>
+</body>
+</html>

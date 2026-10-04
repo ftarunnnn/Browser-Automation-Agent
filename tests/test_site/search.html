@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Courses - WebPilot AI Test</title>
+</head>
+<body style="font-family: sans-serif; padding: 2rem;">
+    <h2>Search AI & Engineering Courses</h2>
+    <input type="text" id="search-input" name="q" placeholder="Enter course name..." style="padding: 8px; width: 300px;" />
+    <button id="search-btn" onclick="doSearch()" style="padding: 8px 16px;">Search</button>
+
+    <div id="results" style="margin-top: 20px;"></div>
+
+    <script>
+        function doSearch() {
+            const query = document.getElementById('search-input').value;
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = `
+                <h3>Results for "${query}":</h3>
+                <ul>
+                    <li><a href="#">Python Masterclass 2026</a> - $49</li>
+                    <li><a href="#">AI Agent Engineering with Playwright</a> - $79</li>
+                    <li><a href="#">Deep Learning Specialization</a> - $99</li>
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal Popup - WebPilot AI Test</title>
+</head>
+<body style="font-family: sans-serif; padding: 2rem;">
+    <h2>Page with Modal Overlay</h2>
+    <div id="modal-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 2rem; border-radius: 8px; text-align: center;">
+            <h3>Discount Offer Dialog</h3>
+            <button id="close-modal-btn" onclick="document.getElementById('modal-overlay').style.display = 'none';">Close Modal</button>
+        </div>
+    </div>
+    <p>Main page content behind overlay.</p>
+</body>
+</html>
